@@ -1,0 +1,23 @@
+services:
+  mariadb:
+    image: mariadb:11.4
+    container_name: order-api-mariadb
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: orderdb
+      MARIADB_USER: order_user
+      MARIADB_PASSWORD: order_pass
+      TZ: America/Sao_Paulo
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mariadb-admin", "ping", "-h", "127.0.0.1", "-u", "root", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  mariadb_data:
