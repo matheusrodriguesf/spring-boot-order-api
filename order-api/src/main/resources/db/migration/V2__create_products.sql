@@ -1,0 +1,9 @@
+CREATE TABLE products (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    description VARCHAR(500),
+    price DECIMAL(19,2) NOT NULL,
+    stock INT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT pk_products PRIMARY KEY (id)
+);

@@ -1,0 +1,9 @@
+CREATE TABLE orders (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    user_id BIGINT NOT NULL,
+    status VARCHAR(20) NOT NULL,
+    total DECIMAL(19,2) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT pk_orders PRIMARY KEY (id),
+    CONSTRAINT fk_orders_user FOREIGN KEY (user_id) REFERENCES users(id)
+);
