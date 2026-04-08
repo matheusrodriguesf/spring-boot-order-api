@@ -16,10 +16,10 @@ public interface ProductMapper {
         }
 
         return Product.builder()
-                .name(productFormDTO.name())
-                .description(productFormDTO.description())
-                .price(productFormDTO.price())
-                .stock(productFormDTO.stock())
+            .name(productFormDTO.name())
+            .description(productFormDTO.description())
+            .price(productFormDTO.price())
+            .stock(productFormDTO.stock())
                 .build();
     }
 

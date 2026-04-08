@@ -6,5 +6,4 @@ public record ProductResponseDTO(
         String description,
         String price,
         Integer stock) {
-
 }

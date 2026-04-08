@@ -7,5 +7,4 @@ public record ProductFormDTO(
         String description,
         BigDecimal price,
         Integer stock) {
-
 }

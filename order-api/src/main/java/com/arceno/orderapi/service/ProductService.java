@@ -7,6 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.arceno.orderapi.dto.ProductFormDTO;
 import com.arceno.orderapi.dto.ProductResponseDTO;
+import com.arceno.orderapi.entity.Product;
+import com.arceno.orderapi.exception.ProductNotFoundException;
 import com.arceno.orderapi.mapper.ProductMapper;
 import com.arceno.orderapi.repository.ProductRepository;
 
@@ -33,9 +35,7 @@ public class ProductService {
 
     public ProductResponseDTO getProductById(Long id) {
         log.info("Buscando produto com id: {}", id);
-        return productRepository.findById(id)
-                .map(productMapper::toResponseDTO)
-                .orElseThrow(() -> new RuntimeException("Produto não encontrado com id: " + id));
+        return productMapper.toResponseDTO(findProductByIdOrThrow(id));
     }
 
     @Transactional
@@ -49,8 +49,7 @@ public class ProductService {
     @Transactional
     public ProductResponseDTO updateProduct(Long id, ProductFormDTO productFormDTO) {
         log.info("Atualizando produto com id: {}. Novos dados: {}", id, productFormDTO);
-        var existingProduct = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Produto não encontrado com id: " + id));
+        var existingProduct = findProductByIdOrThrow(id);
 
         productMapper.updateEntityFromForm(productFormDTO, existingProduct);
 
@@ -61,11 +60,14 @@ public class ProductService {
     @Transactional
     public void deleteProduct(Long id) {
         log.info("Deletando produto com id: {}", id);
-        if (!productRepository.existsById(id)) {
-            throw new RuntimeException("Produto não encontrado com id: " + id);
-        }
+        var existingProduct = findProductByIdOrThrow(id);
+        productRepository.delete(existingProduct);
 
-        productRepository.deleteById(id);
+    }
+
+    private Product findProductByIdOrThrow(Long id) {
+        return productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException(id));
 
     }
 }
