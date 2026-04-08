@@ -1,7 +1,11 @@
 package com.arceno.orderapi.controller;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
 
 import com.arceno.orderapi.dto.ProductFormDTO;
 import com.arceno.orderapi.dto.ProductResponseDTO;
@@ -20,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
+@Validated
 @RequestMapping("/products")
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
@@ -32,22 +37,23 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ProductResponseDTO getProductById(@PathVariable Long id) {
+    public ProductResponseDTO getProductById(@PathVariable @Positive(message = "Id deve ser maior que zero") Long id) {
         return productService.getProductById(id);
     }
 
     @PostMapping
-    public ProductResponseDTO createProduct(@RequestBody ProductFormDTO productFormDTO) {
+    public ProductResponseDTO createProduct(@RequestBody @Valid ProductFormDTO productFormDTO) {
         return productService.createProduct(productFormDTO);
     }
 
     @PutMapping("/{id}")
-    public ProductResponseDTO updateProduct(@PathVariable Long id, @RequestBody ProductFormDTO productFormDTO) {
+    public ProductResponseDTO updateProduct(@PathVariable @Positive(message = "Id deve ser maior que zero") Long id,
+            @RequestBody @Valid ProductFormDTO productFormDTO) {
         return productService.updateProduct(id, productFormDTO);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteProduct(@PathVariable Long id) {
+    public void deleteProduct(@PathVariable @Positive(message = "Id deve ser maior que zero") Long id) {
         productService.deleteProduct(id);
     }
 
