@@ -26,4 +26,26 @@ public interface ProductMapper {
     @Mapping(target = "price", expression = "java(product.getPrice() != null ? product.getPrice().toString() : null)")
     ProductResponseDTO toResponseDTO(Product product);
 
+    default void updateEntityFromForm(ProductFormDTO productFormDTO, Product product) {
+        if (productFormDTO == null || product == null) {
+            return;
+        }
+
+        if (productFormDTO.name() != null) {
+            product.setName(productFormDTO.name());
+        }
+
+        if (productFormDTO.description() != null) {
+            product.setDescription(productFormDTO.description());
+        }
+
+        if (productFormDTO.price() != null) {
+            product.setPrice(productFormDTO.price());
+        }
+
+        if (productFormDTO.stock() != null) {
+            product.setStock(productFormDTO.stock());
+        }
+    }
+
 }
