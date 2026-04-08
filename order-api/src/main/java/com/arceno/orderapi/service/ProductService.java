@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.arceno.orderapi.dto.ProductFormDTO;
 import com.arceno.orderapi.dto.ProductResponseDTO;
 import com.arceno.orderapi.mapper.ProductMapper;
 import com.arceno.orderapi.repository.ProductRepository;
@@ -33,6 +34,13 @@ public class ProductService {
         return productRepository.findById(id)
                 .map(productMapper::toResponseDTO)
                 .orElseThrow(() -> new RuntimeException("Produto não encontrado com id: " + id));
+    }
+
+    public ProductResponseDTO createProduct(ProductFormDTO productFormDTO) {
+        log.info("Criando novo produto: {}", productFormDTO);
+        var product = productMapper.toEntity(productFormDTO);
+        var savedProduct = productRepository.save(product);
+        return productMapper.toResponseDTO(savedProduct);
     }
 
 }
