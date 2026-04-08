@@ -58,4 +58,14 @@ public class ProductService {
         return productMapper.toResponseDTO(updatedProduct);
     }
 
+    @Transactional
+    public void deleteProduct(Long id) {
+        log.info("Deletando produto com id: {}", id);
+        if (!productRepository.existsById(id)) {
+            throw new RuntimeException("Produto não encontrado com id: " + id);
+        }
+
+        productRepository.deleteById(id);
+
+    }
 }
