@@ -26,6 +26,39 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
+        @ExceptionHandler(UserNotFoundException.class)
+        public ResponseEntity<ApiErrorResponse> handleUserNotFound(UserNotFoundException ex) {
+                var response = new ApiErrorResponse(
+                                HttpStatus.NOT_FOUND.value(),
+                                "Não encontrado",
+                                ex.getMessage(),
+                                Instant.now().toString());
+
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+
+        @ExceptionHandler(InvalidOrderRequestException.class)
+        public ResponseEntity<ApiErrorResponse> handleInvalidOrderRequest(InvalidOrderRequestException ex) {
+                var response = new ApiErrorResponse(
+                                HttpStatus.BAD_REQUEST.value(),
+                                "Requisição inválida",
+                                ex.getMessage(),
+                                Instant.now().toString());
+
+                return ResponseEntity.badRequest().body(response);
+        }
+
+        @ExceptionHandler(InsufficientStockException.class)
+        public ResponseEntity<ApiErrorResponse> handleInsufficientStock(InsufficientStockException ex) {
+                var response = new ApiErrorResponse(
+                                HttpStatus.CONFLICT.value(),
+                                "Conflito de negócio",
+                                ex.getMessage(),
+                                Instant.now().toString());
+
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+        }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ValidationErrorResponse> handleValidationErrors(MethodArgumentNotValidException ex) {
         Map<String, String> fieldErrors = ex.getBindingResult()
