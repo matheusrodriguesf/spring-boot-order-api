@@ -26,30 +26,63 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
-        @ExceptionHandler(UserNotFoundException.class)
-        public ResponseEntity<ApiErrorResponse> handleUserNotFound(UserNotFoundException ex) {
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleUserNotFound(UserNotFoundException ex) {
+        var response = new ApiErrorResponse(
+                HttpStatus.NOT_FOUND.value(),
+                "Não encontrado",
+                ex.getMessage(),
+                Instant.now().toString());
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+    @ExceptionHandler(OrderNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleOrderNotFound(OrderNotFoundException ex) {
+        var response = new ApiErrorResponse(
+                HttpStatus.NOT_FOUND.value(),
+                "Não encontrado",
+                ex.getMessage(),
+                Instant.now().toString());
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+    @ExceptionHandler(InvalidOrderRequestException.class)
+    public ResponseEntity<ApiErrorResponse> handleInvalidOrderRequest(InvalidOrderRequestException ex) {
+        var response = new ApiErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                "Requisição inválida",
+                ex.getMessage(),
+                Instant.now().toString());
+
+        return ResponseEntity.badRequest().body(response);
+    }
+
+    @ExceptionHandler(InsufficientStockException.class)
+    public ResponseEntity<ApiErrorResponse> handleInsufficientStock(InsufficientStockException ex) {
+        var response = new ApiErrorResponse(
+                HttpStatus.CONFLICT.value(),
+                "Conflito de negócio",
+                ex.getMessage(),
+                Instant.now().toString());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+    }
+
+        @ExceptionHandler(InvalidOrderStatusTransitionException.class)
+        public ResponseEntity<ApiErrorResponse> handleInvalidStatusTransition(InvalidOrderStatusTransitionException ex) {
                 var response = new ApiErrorResponse(
-                                HttpStatus.NOT_FOUND.value(),
-                                "Não encontrado",
+                                HttpStatus.CONFLICT.value(),
+                                "Conflito de negócio",
                                 ex.getMessage(),
                                 Instant.now().toString());
 
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
         }
 
-        @ExceptionHandler(InvalidOrderRequestException.class)
-        public ResponseEntity<ApiErrorResponse> handleInvalidOrderRequest(InvalidOrderRequestException ex) {
-                var response = new ApiErrorResponse(
-                                HttpStatus.BAD_REQUEST.value(),
-                                "Requisição inválida",
-                                ex.getMessage(),
-                                Instant.now().toString());
-
-                return ResponseEntity.badRequest().body(response);
-        }
-
-        @ExceptionHandler(InsufficientStockException.class)
-        public ResponseEntity<ApiErrorResponse> handleInsufficientStock(InsufficientStockException ex) {
+        @ExceptionHandler(OrderUpdateNotAllowedException.class)
+        public ResponseEntity<ApiErrorResponse> handleOrderUpdateNotAllowed(OrderUpdateNotAllowedException ex) {
                 var response = new ApiErrorResponse(
                                 HttpStatus.CONFLICT.value(),
                                 "Conflito de negócio",
